@@ -14,50 +14,6 @@ Build the binary using `make`:
 make deps build
 ```
 
-### Example
-
-```sh
-./drone-rsync <<EOF
-{
-    "repo": {
-        "clone_url": "git://github.com/drone/drone",
-        "owner": "drone",
-        "name": "drone",
-        "full_name": "drone/drone"
-    },
-    "system": {
-        "link_url": "https://beta.drone.io"
-    },
-    "build": {
-        "number": 22,
-        "status": "success",
-        "started_at": 1421029603,
-        "finished_at": 1421029813,
-        "message": "Update the Readme",
-        "author": "johnsmith",
-        "author_email": "john.smith@gmail.com"
-        "event": "push",
-        "branch": "master",
-        "commit": "436b7a6e2abaddfd35740527353e78a227ddcb2c",
-        "ref": "refs/heads/master"
-    },
-    "workspace": {
-        "root": "/drone/src",
-        "path": "/drone/src/github.com/drone/drone"
-    },
-    "vargs": {
-        "user": "root",
-        "host":" test.drone.io",
-        "port": 22,
-        "source": "dist/",
-        "target": "/path/on/server",
-        "delete": false,
-        "recursive": false
-    }
-}
-EOF
-```
-
 ## Docker
 
 Build the container using `make`:
@@ -66,46 +22,20 @@ Build the container using `make`:
 make deps docker
 ```
 
-### Example
+## Usage
+
+Execute from the working directory:
 
 ```sh
-docker run -i plugins/drone-rsync <<EOF
-{
-    "repo": {
-        "clone_url": "git://github.com/drone/drone",
-        "owner": "drone",
-        "name": "drone",
-        "full_name": "drone/drone"
-    },
-    "system": {
-        "link_url": "https://beta.drone.io"
-    },
-    "build": {
-        "number": 22,
-        "status": "success",
-        "started_at": 1421029603,
-        "finished_at": 1421029813,
-        "message": "Update the Readme",
-        "author": "johnsmith",
-        "author_email": "john.smith@gmail.com"
-        "event": "push",
-        "branch": "master",
-        "commit": "436b7a6e2abaddfd35740527353e78a227ddcb2c",
-        "ref": "refs/heads/master"
-    },
-    "workspace": {
-        "root": "/drone/src",
-        "path": "/drone/src/github.com/drone/drone"
-    },
-    "vargs": {
-        "user": "root",
-        "host":" test.drone.io",
-        "port": 22,
-        "source": "dist/",
-        "target": "/path/on/server",
-        "delete": false,
-        "recursive": false
-    }
-}
-EOF
+docker run --rm \
+  -e PLUGIN_HOST=foo.com \
+  -e PLUGIN_USER=root \
+  -e PLUGIN_KEY="$(cat ${HOME}/.ssh/id_rsa)" \
+  -e PLUGIN_SOURCE=dist/ \
+  -e PLUGIN_TARGET=/path/on/server \
+  -e PLUGIN_DELETE=true \
+  -e PLUGIN_RECURSIVE=true \
+  -v $(pwd):$(pwd) \
+  -w $(pwd) \
+  plugins/drone-rsync
 ```
