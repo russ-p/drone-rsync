@@ -77,9 +77,9 @@ func main() {
 			EnvVar: "PLUGIN_FILTER,FILTER",
 		},
 		cli.StringSliceFlag{
-			Name:   "commands",
+			Name:   "script",
 			Usage:  "execute commands on the remote host after files are copied",
-			EnvVar: "PLUGIN_COMMANDS,COMMANDS",
+			EnvVar: "PLUGIN_SCRIPT,SCRIPT",
 		},
 		cli.StringFlag{
 			Name:   "ssh-key",
@@ -104,9 +104,14 @@ func run(c *cli.Context) {
 			Include:   c.StringSlice("include"),
 			Exclude:   c.StringSlice("exclude"),
 			Filter:    c.StringSlice("filter"),
-			Commands:  c.StringSlice("commands"),
+			Commands:  c.StringSlice("script"),
 			Key:       c.String("ssh-key"),
 		},
+	}
+
+	if len(plugin.Config.Key) == 0 {
+		fmt.Println("No SSH key")
+		os.Exit(1)
 	}
 
 	if err := plugin.Exec(); err != nil {

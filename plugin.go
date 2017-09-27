@@ -123,7 +123,7 @@ func (p Plugin) run(key, host string) error {
 	addr := net.JoinHostPort(host, strconv.Itoa(p.Config.Port))
 
 	// trace command used for debugging in the build logs
-	fmt.Printf("$ ssh %s@%s -p %d\n", p.Config.User, addr, p.Config.Port)
+	fmt.Printf("$ ssh %s@%s -p %d \n", p.Config.User, addr, p.Config.Port)
 
 	signer, err := ssh.ParsePrivateKey([]byte(key))
 	if err != nil {
@@ -131,8 +131,9 @@ func (p Plugin) run(key, host string) error {
 	}
 
 	config := &ssh.ClientConfig{
-		User: p.Config.User,
-		Auth: []ssh.AuthMethod{ssh.PublicKeys(signer)},
+		User:            p.Config.User,
+		Auth:            []ssh.AuthMethod{ssh.PublicKeys(signer)},
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
 
 	client, err := ssh.Dial("tcp", addr, config)

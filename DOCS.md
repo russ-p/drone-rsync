@@ -10,7 +10,7 @@ Use the rsync plugin to deploy files to a server using rsync over ssh. The follo
 * `include` - include files matching the specified pattern
 * `exclude` - exclude files matching the specified pattern
 * `filter` - include or exclude files according to filtering rules
-* `commands` - execute commands on the remote host after files are copied
+* `script` - execute commands on the remote host after files are copied
 * `key` - private SSH key for the remote machine
 
 The following secret values can be set to configure the plugin.
